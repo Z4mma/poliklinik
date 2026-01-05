@@ -14,6 +14,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function()
 {   Route::get('/dashboard', function(){
         return view('admin.dashboard');
     })->name('admin.dashboard');
+    Route::resource('polis', PoliController::class);
 
 });
 Route::middleware(['auth', 'role:dokter'])->prefix('dokter')->group(function()
