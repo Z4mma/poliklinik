@@ -22,12 +22,19 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function()
     Route::resource('pasien', PasienController::class);
     Route::resource('obat', ObatController::class);
     Route::resource('jadwal-periksa', JadwalPeriksaController::class);
+    route::resource('periksa-pasien', PeriksaPasienController::class);
 
 });
 Route::middleware(['auth', 'role:dokter'])->prefix('dokter')->group(function()
 {   Route::get('/dashboard', function(){
         return view('dokter.dashboard');
     })->name('dokter.dashboard');
+    Route::resource('jadwal-periksa', JadwalPeriksaController::class);
+    Route::get('periksa-pasien', PeriksaPasienController::class, 'index')->name('periksa-pasien.index');
+    Route::post('periksa-pasien/{id}', PeriksaPasienController::class, 'store')->name('periksa-pasien.store');
+    Route::get('periksa-pasien/{id}', [PeriksaPasienController::class, 'create'])->name('periksa-pasien.show');
+    Route::get('riwayat-pasien', RiwayatPasienController::class, 'index')->name('dokter.riwayat-pasien.index');
+    Route::get('riwayat-pasien/{id}', [RiwayatPasienController::class, 'show'])->name('dokter.riwayat-pasien.show');
 
 });
 

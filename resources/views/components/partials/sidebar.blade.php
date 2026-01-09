@@ -51,6 +51,29 @@
                             </p>
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a href="{{ route('pasien.jadwal.index') }}"
+                         class="nav-link {{ request()->routeIs('pasien.jadwal') ? 'active' : '' }}">
+                            <i class="nav-icon fas fa-calendar-alt"></i>
+                            <p>
+                                Jadwal Periksa
+                            </p>
+                        </a>
+                        <li class="nav-item">
+                            <a href="{{ route('periksa-pasien.index') }}"
+                             class="nav-link {{ request()->routeIs('periksa-pasien') ? 'active' : '' }}">
+                                <i class="nav-icon fas fa-stethoscope"></i>
+                                <p>
+                                    Periksa Pasien
+                                </p>
+                        <li class="nav-item">
+                            <a href="{{ route('riwayat-pasien.index') }}"
+                             class="nav-link {{ request()->routeIs('riwayat-pasien') ? 'active' : '' }}">
+                                <i class="nav-icon fas fa-history"></i>
+                                <p>
+                                    Riwayat Pasien
+                                </p>
+                        </li>        
                 @endif
 
                 <!-- ROLE DOKTER -->
