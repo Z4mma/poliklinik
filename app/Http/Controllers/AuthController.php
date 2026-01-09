@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Container\Attributes\Auth;
 use Illuminate\Http\Request;
 
@@ -32,6 +33,11 @@ class AuthController extends Controller
             return back()->withErrors(['email'=> 'Email atau password Salah !']);        
         }
 
+    public function showRegister()
+    {
+        return view('auth.register');
+    }
+
     public function register (Request $request)
     {
         $request->validate([
@@ -42,6 +48,16 @@ class AuthController extends Controller
             'email'=> ['required','string','email', 'max:255', 'unique:user,email'],
             'password'=> ['required','confirmed'],
         ]);
+
+        if(User::where('no_ktp', $request->no_ktp)->exists()){
+            return back()->withErrors(['no_ktp' => 'Nomor KTP sudah terdaftar!']);
+        }
+
+        $no_rm = date('Ymd').'_'.str_pad(
+            User::where('no_rm', 'like', date('Ymd').'%')->count() + 1,
+            3, '0',
+            STR_PAD_LEFT
+        );
 
         User::create([
             'nama' => $request->nama,
@@ -55,6 +71,18 @@ class AuthController extends Controller
         
 
         return redirect()->route('login');
+    }
+
+    public function logout(Request $request)
+    {
+        Auth::logout();
+        return redirect()->route('login');
+    }
+
+    public function dokter()
+    {
+        $data = Poli::with('dokters')->get();
+        return $data;
     }
 }
 

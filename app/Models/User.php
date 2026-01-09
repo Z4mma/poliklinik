@@ -9,6 +9,9 @@ use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
+    use HasFactory, Notifiable;
+
+    
     protected $fillable = [
         'nama',
         'alamat',
@@ -21,18 +24,18 @@ class User extends Authenticatable
     ];
     protected $hidden = [
         'password',
-        'remember_token'
+        'remember_token',
     ];
-    protected function cast(): array
+    protected function casts(): array
     {
         return [
             'email_verified_at' => 'datetime',
-            'password' => 'hashed'
+            'password' => 'hashed',
         ];
     }
 
-    public function pasien(){
-        return $this->belongsTo(User::class, 'id_pasien');
+    public function poli(){
+        return $this->belongsTo(Poli::class, 'id_poli');
     }
 
     public function jadwalPeriksa(){

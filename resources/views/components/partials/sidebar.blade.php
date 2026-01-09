@@ -42,6 +42,15 @@
                             </p>
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a href="{{ route('pasien.daftar.index') }}"
+                         class="nav-link {{ request()->routeIs('pasien.daftar') ? 'active' : '' }}">
+                            <i class="nav-icon fas fa-hospital-user"></i>
+                            <p>
+                                poli
+                            </p>
+                        </a>
+                    </li>
                 @endif
 
                 <!-- ROLE DOKTER -->
@@ -54,6 +63,21 @@
                             </p>
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a href="{{ route('dokter.index') }}"
+                         class="nav-link {{ request()->routeIs('dokter.*') ? 'active' : '' }}">
+                            <i class="nav-icon fas fa-user-md"></i>
+                            <p>Manajemen Dokter</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ route('obat.index') }}"
+                         class="nav-link {{ request()->routeIs('obat.*') ? 'active' : '' }}">
+                            <i class="nav-icon fas fa-pills"></i>
+                            <p>
+                                Manajemen Obat
+                            </p>
+                        </a>
                 @endif
 
                 <li class="nav-item ">
