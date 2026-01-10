@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\dokter;
 
-use App\Http\Controllers\controller;
 use App\Models\Periksa;
 use Illuminate\Http\Request;
 

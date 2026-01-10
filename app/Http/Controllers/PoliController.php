@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Pasien;
 
-use App\Http\Controllers\controller;
 use App\Models\DaftarPoli;
 use App\Models\JadwalPeriksa;
 use App\Models\Poli;
@@ -14,6 +13,40 @@ class PoliController extends Controller
     /**
      * Display a listing of the resource.
      */
+    public function index()
+    {
+        $dokter = Auth::user();
+
+        $jadwalPeriksas= JadwalPeriksa::where('id_dokter', $dokter->id)->orderBy('hari')->get();
+        return view('dokter.jadwal-periksa.index', compact('jadwalPeriksas'));
+    }
+
+    public function create()
+    {
+        return view('dokter.jadwal-periksa.create');
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Request $request)
+    {
+        $request->validate([
+            'hari'=> 'required',
+            'jam_mulai'=>'required',
+            'jam_selesai'=>'required',
+
+        ]);
+        JadwalPeriksa::create([
+            'id_dokter'=> Auth::id(),
+            'hari'=>$request->hari,
+            'jam_mulai'=>$request->jam_mulai,
+            'jam_selesai'=>$request->jam_selesai,
+        ]);    
+        return redirect()->route('jadwal-periksa.index')
+        ->with('message', 'Jadwal Periksa berhasil ditambahkan.')
+        ->with('type', 'success');
+    }
     public function get()
     {
         $user = Auth::user();
@@ -26,50 +59,10 @@ class PoliController extends Controller
         ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function submit()
-    {
-        $request->validate([
-            'id_jadwal'=> 'required|exists:jadwal_periksas,id',
-            'keluhan'=>'nullable|string',
-            'id_pasien'=>'required|exists:users,id',
-
-        ]);
-        $jumlahSudahDaftar = DaftarPoli::where('id_jadwal', $request->id_jadwal)->count();
-        $daftar = DaftarPoli::create([
-            'id_jadwal'=> $request->id_jadwals,
-            'id_pasien'=>$request->id_pasien,
-            'keluhan'=>$request->keluhan,
-            'no_antrian'=> $jumlahSudahDaftar + 1,
-        ]);    
-        return redirect()->back()->with('message', 'Berhasil mendaftar ke Poli>')->with('type', 'success');
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        $validatedData = $request->validate([
-            'nama_poli' => 'required',
-            'keterangan' => 'nullable',
-        ]);
-
-        Poli::create($validatedData);
-
-        return redirect()->route('polis.index')->with('success', 'Poli berhasil ditambahkan.');
-    }
-
-    /**
-
-     * Show the form for editing the specified resource.
-     */
     public function edit(string $id)
     {
-        $poli = Poli::findOrFail($id);
-        return view('admin.poli.edit', compact('poli'));
+        $jadwalPeriksa = JadwalPeriksa::findOrFail($id);
+        return view('dokter.jadwal-periksa.edit', compact('jadwalPeriksa'));
     }
 
     /**
@@ -77,15 +70,22 @@ class PoliController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $validatedData = $request->validate([
-            'nama_poli' => 'required',
-            'keterangan' => 'nullable',
+        $request->validate([
+            'hari' => 'required',
+            'jam_mulai' => 'required',
+            'jam_selesai' => 'required',
+        ]);
+        
+        $jadwalPeriksa = JadwalPeriksa::findOrFail($id);
+        $jadwalPeriksa->update([
+            'hari' => $request->hari,
+            'jam_mulai' => $request->jam_mulai,
+            'jam_selesai' => $request->jam_selesai,
         ]);
 
-        $poli = Poli::findOrFail($id);
-        $poli->update($validatedData);
-
-        return redirect()->route('polis.index')->with('success', 'Poli berhasil diperbarui.');
+        return redirect()->route('jadwal-periksa.index')
+        ->with('message', 'Berhasil Melakukan Update Data.')
+        ->with('type', 'success');
     }
 
     /**
@@ -93,9 +93,11 @@ class PoliController extends Controller
      */
     public function destroy(string $id)
     {
-        $poli = Poli::findOrFail($id);
-        $poli->delete($poli);
+        $jadwalPeriksa = JadwalPeriksa::findOrFail($id);
+        $jadwalPeriksa->delete();
 
-        return redirect()->route('polis.index')->with('success', 'Poli berhasil dihapus.');
+        return redirect()->route('jadwal-periksa.index')
+        ->with('message', 'Berhasil Menghapus Data.')
+        ->with('type', 'success');
     }
 }

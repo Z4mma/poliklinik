@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\dokter;
 
-use App\Http\Controllers\controller;
 use App\Models\DaftarPoli;
 use App\Models\DetailPeriksa;
 use App\Models\Obat;
 use App\Models\Periksa;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Controller;
 
 class PeriksaPasienController extends Controller
 {
